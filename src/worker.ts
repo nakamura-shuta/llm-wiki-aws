@@ -32,8 +32,10 @@ async function extendVisibility(receiptHandle: string): Promise<void> {
 async function dispatch(job: ReturnType<typeof classify>): Promise<void> {
   switch (job.kind) {
     case "s3": {
-      const rec = job.records[0]!;
-      await handleIngest(rec.s3.bucket.name, rec.s3.object.key);
+      // 1 SQS message に複数 Records が乗るケース (aws s3 sync 連投など) を全件処理する
+      for (const rec of job.records) {
+        await handleIngest(rec.s3.bucket.name, rec.s3.object.key);
+      }
       break;
     }
     case "custom":

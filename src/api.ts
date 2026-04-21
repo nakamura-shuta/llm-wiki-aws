@@ -51,7 +51,14 @@ async function handleQuery(req: Request): Promise<Response> {
   const result = await queryBedrock(question, retrieved);
 
   let filing = null;
-  if (saveAnswer !== false && result.hasValidCitation && !result.isInsufficient) {
+  // 無効 citation (retrieved に含まれない page_id) が 1 つでも混ざっていたら filing しない。
+  // 部分的に誤引用した回答を永続化すると wiki 自体が汚染されるため、fail-closed にする。
+  if (
+    saveAnswer !== false &&
+    result.hasValidCitation &&
+    !result.isInsufficient &&
+    result.invalidCitations.length === 0
+  ) {
     const hash = contentHash(result.answer);
     const slug = slugify(question);
     filing = { state: "enqueued", slug };

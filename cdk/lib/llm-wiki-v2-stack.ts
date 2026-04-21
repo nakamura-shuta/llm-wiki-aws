@@ -89,9 +89,12 @@ export class LlmWikiV2Stack extends Stack {
       deadLetterQueue: { queue: dlq, maxReceiveCount: 3 },
     });
 
+    // Ingest 対象は sources/*.md のみに限定。誤って別 prefix / 別拡張子 (大きな PDF など)
+    // を入れても LLM に流れないようにするガード。
     rawBucket.addEventNotification(
       s3.EventType.OBJECT_CREATED,
       new s3n.SqsDestination(queue),
+      { prefix: 'sources/', suffix: '.md' },
     );
 
     // ================================================================

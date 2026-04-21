@@ -4,6 +4,11 @@ Andrej Karpathy の [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893
 
 clone → `cdk deploy` → S3 にサンプルを投入 → `curl /query` で動作確認できます。
 
+> ⚠️ **これは検証用 PoC です。本番・インターネット公開には使わないでください。**
+> ALB は HTTP で Bearer token が平文で流れる構成なので、公開するとトークンが盗聴されます。
+> 触るときは **個人 AWS アカウント + VPN / 社内閉域 / 短時間の一時検証** に限定してください。
+> 本番化のチェックリスト (ALB HTTPS + ACM、IAM / Cognito 認証、監査ログ、NAT GW 代替の VPC Endpoint、CloudWatch Alarms 等) は README 末尾を参照。
+
 ## 構成
 
 - **LLM**: Bedrock (`global.anthropic.claude-sonnet-4-6`)
@@ -84,6 +89,15 @@ cd cdk && npx cdk destroy LlmWikiV2Stack
 ```
 
 NAT GW / Fargate / ALB / S3 Files は時間課金。検証後は destroy 推奨。
+
+## 本番化で要検討 (PoC 対象外)
+
+- ALB を HTTPS 化 (ACM 証明書、`sg-allow-80` を閉じる)
+- Bearer token → IAM / Cognito / OIDC 認証
+- NAT GW → Bedrock / S3 / ECR / Logs / SSM の VPC Endpoint でコスト削減
+- CloudWatch Alarms: DLQ depth / Fargate CPU / ALB 5xx / Ingest 失敗率
+- 監査ログ (filing は誰が、repair は何を直したか)
+- 数百 entity 以上で hierarchical index / sharded wiki に切り替え
 
 ## License
 
