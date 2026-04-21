@@ -4,7 +4,7 @@ Andrej Karpathy の [LLM Wiki](https://gist.github.com/karpathy/442a6bf555914893
 
 clone → `cdk deploy` → S3 にサンプルを投入 → `curl /query` で動作確認できます。
 
-> ⚠️ **検証用デモです。公開エンドポイントには使わないでください。** ALB は HTTP で Bearer token が平文で流れるため、インターネット公開するとトークンが盗聴されます。個人 AWS アカウント + 一時検証に留めてください。
+> ⚠️ **検証用デモです。** ALB は HTTP + Bearer token 平文のため、インターネット公開には使わないでください。
 
 ## 構成
 
