@@ -1,0 +1,9 @@
+.doc
+seed
+phase0
+cdk
+cdk.out
+node_modules
+.git
+*.md
+tsconfig.json

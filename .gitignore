@@ -1,0 +1,48 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / local assistant
+.vscode/
+.idea/
+.cursor/
+CLAUDE.md
+*.swp
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Node
+**/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# CDK
+**/cdk.out/
+**/cdk.staging/
+# cdk.context.json は AWS アカウント ID 等を含むため commit しない。
+# 初回 synth / deploy 時に各自の環境で再生成される。
+**/cdk.context.json
+
+# TypeScript build output (tsconfig.json は noEmit:true)
+**/*.js
+**/*.d.ts
+**/*.js.map
+!**/jest.config.js
+
+# Coverage / dist
+**/coverage/
+**/dist/
+
+# 本リポジトリでは v2 の最小動作確認セット (src/ + cdk/ + seed/) のみを公開する。
+# 以下は内部メモ / Phase 0 検証アーカイブのため公開対象外。
+.doc/
+phase0/
+
+# 実行時の一時出力
+/tmp/*.json
+*-out.json
+lint-*.md
